@@ -24,4 +24,6 @@
 -   Version: 1.0
 -   Language: English
 -   Available file formats: json, sql dump, csv
+-   Keywords: apollo, apollo missions, NASA
+-   Date and time format: ISO8601
 -   Author: Petar Jerković

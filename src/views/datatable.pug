@@ -1,0 +1,37 @@
+html 
+    head 
+        title Apollo Crewed Missions
+        meta(name="title", content="Apollo Crewed Missions")
+        meta(name="description", content="List of Apollo crewed missions")
+        meta(name="author", content="Petar Jerković")
+        meta(http-equiv="Content-Type", content="text/html;charset=UTF-8")
+        
+        script(src="https://code.jquery.com/jquery-3.5.1.js")
+        script(src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js")
+        link(href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css" rel="stylesheet")
+        script(src="https://cdn.datatables.net/fixedheader/3.2.3/js/dataTables.fixedHeader.min.js")
+        script(src="https://cdn.datatables.net/buttons/2.3.2/js/dataTables.buttons.min.js")
+        script(src="https://cdn.datatables.net/buttons/2.3.2/js/buttons.html5.min.js")
+        script
+            include ../public/scripts/datatable.js
+        style
+            include ../public/style/style.css
+
+    body 
+        .content
+            h1 Apollo Crewed Missions
+
+            table#example.display(style="width:100%")
+                thead
+                    tr
+                        th Name
+                        th Launch date
+                        th Launch site
+                        th Crew
+                        th Launch vehicle
+                        th Command module
+                        th Lunar module
+                        th Duration
+                        th Remarks
+                        th Wiki
+                tbody

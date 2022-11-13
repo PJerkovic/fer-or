@@ -8,6 +8,7 @@
 
 -   mission name
 -   launch date
+-   launch site
 -   crew list
     -   name
     -   date of birth

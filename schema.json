@@ -1,0 +1,240 @@
+{
+    "$schema": "https://json-schema.org/draft/2019-09/schema",
+    "$id": "https://or.fer.unizg.hr/apollo-missions.json",
+    "type": "object",
+    "default": {},
+    "title": "Root Schema",
+    "description": "List of Apollo crewed missions",
+    "required": ["missions"],
+    "properties": {
+        "missions": {
+            "type": "array",
+            "default": [],
+            "title": "Missions Schema",
+            "description": "List of missions",
+            "items": {
+                "type": "object",
+                "title": "A Schema",
+                "description": "Object with all info about mission",
+                "required": [
+                    "name",
+                    "launch_date",
+                    "launch_site",
+                    "crew",
+                    "launch_vehicle",
+                    "command_module",
+                    "lunar_module",
+                    "duration",
+                    "remarks",
+                    "wiki"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "title": "Mission name Schema",
+                        "description": "Name of mission",
+                        "examples": ["Apollo 1", "Apollo 7", "Apollo 17"]
+                    },
+                    "launch_date": {
+                        "type": "string",
+                        "title": "Launch date Schema",
+                        "description": "Launch  date of mission",
+                        "examples": ["1967-02-20", "1968-10-10", "1972-12-06"]
+                    },
+                    "launch_site": {
+                        "type": "string",
+                        "title": "Launch site Schema",
+                        "description": "Launch site of mission",
+                        "examples": [
+                            "Launch Complex 34",
+                            "Launch Complex 39A",
+                            "Launch Complex 39B"
+                        ]
+                    },
+                    "crew": {
+                        "type": "string",
+                        "title": "Crew Schema",
+                        "description": "Crew list of mission",
+                        "examples": [
+                            "Gus Grissom, Ed White, Roger B. Chaffee",
+                            "John Young, Ken Mattingly, Charles Duke",
+                            "Eugene Cernan, Ronald Evans, Harrison Schmitt"
+                        ]
+                    },
+                    "launch_vehicle": {
+                        "type": "string",
+                        "title": "Launch vehicle Schema",
+                        "description": "Launch vehicle of mission",
+                        "examples": [
+                            "Saturn IB (AS-204)",
+                            "Saturn IB (AS-205)",
+                            "Saturn V (AS-512)"
+                        ]
+                    },
+                    "command_module": {
+                        "type": "string",
+                        "title": "Command module Schema",
+                        "description": "Command module used in mission",
+                        "examples": ["", "Gumdrop", "America"]
+                    },
+                    "lunar_module": {
+                        "type": "string",
+                        "title": "Lunar module Schema",
+                        "description": "Lunar module used in mission",
+                        "examples": ["", "Orion", "Challenger"]
+                    },
+                    "duration": {
+                        "type": "string",
+                        "title": "Duration Schema",
+                        "description": "Duration of mission",
+                        "examples": [
+                            "",
+                            "P0Y0M10DT20H9M3S",
+                            "P0Y0M12DT13H51M59S"
+                        ]
+                    },
+                    "remarks": {
+                        "type": "string",
+                        "title": "Remarks Schema",
+                        "description": "Mission remarks",
+                        "examples": [
+                            "Test flight of Block II CSM in Earth orbit; included first live TV broadcast from American spacecraft.",
+                            "First circumlunar flight of CSM, had ten lunar orbits in 20 hours. First crewed flight of Saturn V.",
+                            "Landing in Descartes Highlands. Conducted three lunar EVAs and one deep space EVA."
+                        ]
+                    },
+                    "wiki": {
+                        "type": "string",
+                        "title": "Wiki Schema",
+                        "description": "Wikipedia page of mission",
+                        "examples": [
+                            "wikipedia.org/wiki/Apollo_1",
+                            "wikipedia.org/wiki/Apollo_7",
+                            "wikipedia.org/wiki/Apollo_17"
+                        ]
+                    }
+                },
+                "examples": [
+                    {
+                        "name": "Apollo 1",
+                        "launch_date": "1967-02-20",
+                        "launch_site": "Launch Complex 34",
+                        "crew": "Gus Grissom, Ed White, Roger B. Chaffee",
+                        "launch_vehicle": "Saturn IB (AS-204)",
+                        "command_module": "",
+                        "lunar_module": "",
+                        "duration": "",
+                        "remarks": "Never launched. On January 27, 1967, a fire in the command module during a launch pad test killed the crew and destroyed the module. This flight was originally designated AS-204, and was renamed to Apollo 1 at the request of the crew's families.",
+                        "wiki": "wikipedia.org/wiki/Apollo_1"
+                    },
+                    {
+                        "name": "Apollo 7",
+                        "launch_date": "1968-10-10",
+                        "launch_site": "Launch Complex 34",
+                        "crew": "Wally Schirra, Donn F. Eisele, Walter Cunningham",
+                        "launch_vehicle": "Saturn IB (AS-205)",
+                        "command_module": "",
+                        "lunar_module": "",
+                        "duration": "P0Y0M10DT20H9M3S",
+                        "remarks": "Test flight of Block II CSM in Earth orbit; included first live TV broadcast from American spacecraft.",
+                        "wiki": "wikipedia.org/wiki/Apollo_7"
+                    },
+                    {
+                        "name": "Apollo 17",
+                        "launch_date": "1972-12-06",
+                        "launch_site": "Launch Complex 39A",
+                        "crew": "Eugene Cernan, Ronald Evans, Harrison Schmitt",
+                        "launch_vehicle": "Saturn V (AS-512)",
+                        "command_module": "America",
+                        "lunar_module": "Challenger",
+                        "duration": "P0Y0M12DT13H51M59S",
+                        "remarks": "Landing at Taurus-Littrow. First professional geologist on the Moon. First night launch. Conducted three lunar EVAs and one deep space EVA.",
+                        "wiki": "wikipedia.org/wiki/Apollo_17"
+                    }
+                ]
+            },
+            "examples": [
+                [
+                    {
+                        "name": "Apollo 1",
+                        "launch_date": "1967-02-20",
+                        "launch_site": "Launch Complex 34",
+                        "crew": "Gus Grissom, Ed White, Roger B. Chaffee",
+                        "launch_vehicle": "Saturn IB (AS-204)",
+                        "command_module": "",
+                        "lunar_module": "",
+                        "duration": "",
+                        "remarks": "Never launched. On January 27, 1967, a fire in the command module during a launch pad test killed the crew and destroyed the module. This flight was originally designated AS-204, and was renamed to Apollo 1 at the request of the crew's families.",
+                        "wiki": "wikipedia.org/wiki/Apollo_1"
+                    },
+                    {
+                        "name": "Apollo 7",
+                        "launch_date": "1968-10-10",
+                        "launch_site": "Launch Complex 34",
+                        "crew": "Wally Schirra, Donn F. Eisele, Walter Cunningham",
+                        "launch_vehicle": "Saturn IB (AS-205)",
+                        "command_module": "",
+                        "lunar_module": "",
+                        "duration": "P0Y0M10DT20H9M3S",
+                        "remarks": "Test flight of Block II CSM in Earth orbit; included first live TV broadcast from American spacecraft.",
+                        "wiki": "wikipedia.org/wiki/Apollo_7"
+                    },
+                    {
+                        "name": "Apollo 17",
+                        "launch_date": "1972-12-06",
+                        "launch_site": "Launch Complex 39A",
+                        "crew": "Eugene Cernan, Ronald Evans, Harrison Schmitt",
+                        "launch_vehicle": "Saturn V (AS-512)",
+                        "command_module": "America",
+                        "lunar_module": "Challenger",
+                        "duration": "P0Y0M12DT13H51M59S",
+                        "remarks": "Landing at Taurus-Littrow. First professional geologist on the Moon. First night launch. Conducted three lunar EVAs and one deep space EVA.",
+                        "wiki": "wikipedia.org/wiki/Apollo_17"
+                    }
+                ]
+            ]
+        }
+    },
+    "examples": [
+        {
+            "missions": [
+                {
+                    "name": "Apollo 1",
+                    "launch_date": "1967-02-20",
+                    "launch_site": "Launch Complex 34",
+                    "crew": "Gus Grissom, Ed White, Roger B. Chaffee",
+                    "launch_vehicle": "Saturn IB (AS-204)",
+                    "command_module": "",
+                    "lunar_module": "",
+                    "duration": "",
+                    "remarks": "Never launched. On January 27, 1967, a fire in the command module during a launch pad test killed the crew and destroyed the module. This flight was originally designated AS-204, and was renamed to Apollo 1 at the request of the crew's families.",
+                    "wiki": "wikipedia.org/wiki/Apollo_1"
+                },
+                {
+                    "name": "Apollo 7",
+                    "launch_date": "1968-10-10",
+                    "launch_site": "Launch Complex 34",
+                    "crew": "Wally Schirra, Donn F. Eisele, Walter Cunningham",
+                    "launch_vehicle": "Saturn IB (AS-205)",
+                    "command_module": "",
+                    "lunar_module": "",
+                    "duration": "P0Y0M10DT20H9M3S",
+                    "remarks": "Test flight of Block II CSM in Earth orbit; included first live TV broadcast from American spacecraft.",
+                    "wiki": "wikipedia.org/wiki/Apollo_7"
+                },
+                {
+                    "name": "Apollo 17",
+                    "launch_date": "1972-12-06",
+                    "launch_site": "Launch Complex 39A",
+                    "crew": "Eugene Cernan, Ronald Evans, Harrison Schmitt",
+                    "launch_vehicle": "Saturn V (AS-512)",
+                    "command_module": "America",
+                    "lunar_module": "Challenger",
+                    "duration": "P0Y0M12DT13H51M59S",
+                    "remarks": "Landing at Taurus-Littrow. First professional geologist on the Moon. First night launch. Conducted three lunar EVAs and one deep space EVA.",
+                    "wiki": "wikipedia.org/wiki/Apollo_17"
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,319 @@
+openapi: 3.0.0
+info:
+    title: Apollo missions API
+    description: |-
+        This is API for Apollo crewed missions ([Wiki](https://en.wikipedia.org/wiki/List_of_Apollo_missions#Crewed_missions))
+    version: 1.0.0
+    contact:
+        email: petar.jerkovic@fer.hr
+    license:
+        name: CC0 1.0 Universal
+        url: https://creativecommons.org/publicdomain/zero/1.0/
+servers:
+    - url: http://localhost:8080/api
+components:
+    schemas:
+        Astronaut:
+            type: object
+            properties:
+                id:
+                    type: number
+                    example: 17
+                astronaut_name:
+                    type: string
+                    example: Roger B. Chaffee
+                astronaut_dob:
+                    type: string
+                    format: date
+                    example: 1930-04-21
+            required:
+                - astronaut_name
+                - astronaut_dob
+        Mission:
+            properties:
+                id:
+                    type: number
+                    example: 7
+                mission_name:
+                    type: string
+                    example: Apollo 11
+                launch_date:
+                    type: string
+                    format: date
+                    example: 1969-07-15
+                launch_site:
+                    type: string
+                    example: Launch Complex 39A
+                crew:
+                    type: array
+                    items:
+                        $ref: "#/components/schemas/Astronaut"
+                launch_vehicle:
+                    type: string
+                    example: Saturn V (AS-506)
+                command_module:
+                    type: string
+                    example: Columbia
+                lunar_module:
+                    type: string
+                    example: Eagle
+                duration:
+                    type: string
+                    format: duration
+                    example: P0Y0M8DT3H18M35S
+                remarks:
+                    type: string
+                    example: First crewed landing in Sea of Tranquility (Tranquility Base) including a single surface EVA.
+                wiki_page:
+                    type: string
+                    example: https://en.wikipedia.org/wiki/Apollo_11
+    responses:
+        NotFound:
+            description: Not found
+tags:
+    - name: missions
+    - name: crewmates
+    - name: wiki
+paths:
+    /missions:
+        get:
+            summary: "Get all missions"
+            tags:
+                - missions
+            responses:
+                "200":
+                    description: Successful operation
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    message:
+                                        type: string
+                                        example: List missions
+                                    body:
+                                        type: array
+                                        items:
+                                            $ref: "#/components/schemas/Mission"
+    /missions/{missionId}:
+        get:
+            summary: "Find mission by ID"
+            tags:
+                - missions
+            parameters:
+                - name: missionId
+                  in: path
+                  required: true
+                  schema:
+                      type: integer
+                      example: 17
+            responses:
+                "200":
+                    description: Successful operation
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    message:
+                                        type: string
+                                        example: Mission with id=13
+                                    body:
+                                        type: object
+                                        properties:
+                                            body:
+                                                $ref: "#/components/schemas/Mission"
+    /missions/{missionId}/crew:
+        parameters:
+            - name: missionId
+              in: path
+              required: true
+              schema:
+                  type: integer
+                  example: 7
+        get:
+            summary: "Find mission crew by ID"
+            tags:
+                - missions
+            responses:
+                "200":
+                    description: Successful operation
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    message:
+                                        example: Crew of mission with id=7
+                                    body:
+                                        type: array
+                                        items:
+                                            $ref: "#/components/schemas/Astronaut"
+        post:
+            summary: "Add new crewmate to mission"
+            tags:
+                - missions
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            properties:
+                                astronaut_name:
+                                    type: string
+                                    example: Michael Collins
+                                astronaut_dob:
+                                    type: string
+                                    format: date
+                                    example: 1930-01-20
+                            required:
+                                - astronaut_name
+                                - astronaut_dob
+                required: true
+            responses:
+                "201":
+                    description: Successful operation
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    message:
+                                        type: string
+                                        example: Crewmate added with id=17
+                                    body:
+                                        $ref: "#/components/schemas/Astronaut"
+                "400":
+                    description: Invalid request
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    message:
+                                        type: string
+                                        example: Error adding crewmate with id=17
+    /missions/{missionId}/crew/{crewmateId}:
+        parameters:
+            - name: missionId
+              in: path
+              required: true
+              schema:
+                  type: integer
+                  example: 7
+            - name: crewmateId
+              in: path
+              required: true
+              schema:
+                  type: integer
+                  example: 17
+        delete:
+            summary: "Delete crewmate from mission by ID"
+            tags:
+                - missions
+            responses:
+                "200":
+                    description: Successful operation
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    message:
+                                        type: string
+                                        example: Crewmate with id=17 removed from mission with id=7
+                "400":
+                    description: Invalid request
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    message:
+                                        type: string
+                                        example: Error deleting crewmate with id=17
+    /crewmates:
+        get:
+            summary: "Get all crewmates"
+            tags:
+                - crewmates
+            responses:
+                "200":
+                    description: Successful operation
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    message:
+                                        type: string
+                                        example: List crewmates
+                                    body:
+                                        type: array
+                                        items:
+                                            $ref: "#/components/schemas/Astronaut"
+    /crewmates/{crewmateId}:
+        put:
+            summary: "Update an existing crewmate"
+            tags:
+                - crewmates
+            parameters:
+                - name: crewmateId
+                  in: path
+                  required: true
+                  schema:
+                      type: integer
+                      example: 17
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            properties:
+                                astronaut_name:
+                                    type: string
+                                    example: James McDivitt
+                                astronaut_dob:
+                                    type: string
+                                    format: date
+                                    example: 1935-10-25
+                            required:
+                                - astronaut_name
+                                - astronaut_dob
+                required: true
+            responses:
+                "200":
+                    description: Successful operation
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    message:
+                                        example: Crewmate updated with id=17
+                                    body:
+                                        $ref: "#/components/schemas/Astronaut"
+                "404":
+                    description: Not found by ID
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    message:
+                                        example: Crewmate with id=17 not found
+                "400":
+                    description: Error
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    message:
+                                        example: Error updating crewmate with id=17
+    /wiki:
+        get:
+            summary: "Get all link to Wikipedia page"
+            tags:
+                - wiki
+            responses:
+                "200":
+                    description: Successful operation
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    message:
+                                        example: List Wikipedia pages
+                                    body:
+                                        type: array
+                                        items:
+                                            type: string
+                                            example: https://en.wikipedia.org/wiki/Apollo_7

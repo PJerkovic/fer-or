@@ -1,0 +1,19 @@
+html 
+    head 
+        title Apollo Crewed Missions
+        meta(name="title", content="Apollo Crewed Missions")
+        meta(name="description", content="List of Apollo crewed missions")
+        meta(name="author", content="Petar Jerković")
+        meta(http-equiv="Content-Type", content="text/html;charset=UTF-8")
+
+    body 
+        .content
+            .login
+                if user
+                    input(type="button", onclick="location.href='/logout'", value="Logout")
+                else
+                    input(type="button", onclick="location.href='/login'", value="Login")
+            .user-data
+                if user
+                    h2 Welcome, #{user.nickname}
+                    pre #{JSON.stringify(user, null, 2)}

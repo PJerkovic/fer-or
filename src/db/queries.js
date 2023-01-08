@@ -1,3 +1,5 @@
+const path = require("path");
+
 const db = require("./index");
 
 async function getMissions() {
@@ -33,6 +35,60 @@ async function getMissions() {
     });
 }
 
+async function updateCopies() {
+    await db.query(`
+        copy(
+            select
+                mission_name,
+                launch_date,
+                launch_site,
+                astronaut.name as astronaut_name,
+                astronaut.date_of_birth as astronaut_dob,
+                launch_vehicle,
+                command_module,
+                lunar_module,
+                duration,
+                remarks,
+                wiki_page
+            from apollo_mission
+            join apollo_mission_astronaut on apollo_mission.id = apollo_mission_astronaut.apollo_mission 
+            join astronaut on astronaut.id = apollo_mission_astronaut.astronaut
+        ) to '${path.join(
+            process.env.PUBLIC_DATA_LOCATION,
+            "apollo-missions.csv"
+        )}' with delimiter ',' csv header;`);
+
+    await db.query(`
+        copy(
+            select json_agg(row_to_json(t))::text from  (
+                select 
+                    mission_name,
+                    launch_date,
+                    launch_site,
+                    json_agg(
+                        json_build_object(
+                            'astronaut_name', astronaut.name,
+                            'astronaut_dob', astronaut.date_of_birth
+                        )
+                    ) as crew,
+                    launch_vehicle,
+                    command_module,
+                    lunar_module,
+                    duration,
+                    remarks,
+                    wiki_page
+                from apollo_mission
+                join apollo_mission_astronaut on apollo_mission.id = apollo_mission_astronaut.apollo_mission 
+                join astronaut on astronaut.id = apollo_mission_astronaut.astronaut
+                group by mission_name, launch_date, launch_site, launch_vehicle, command_module, lunar_module, duration, remarks, wiki_page
+                order by launch_date
+            ) t
+        ) to '${path.join(
+            process.env.PUBLIC_DATA_LOCATION,
+            "apollo-missions.json"
+        )}';`);
+}
+
 async function addCrewmate(mission_id, { name, date_of_birth }) {
     const client = await db.connect();
 
@@ -64,10 +120,12 @@ async function addCrewmate(mission_id, { name, date_of_birth }) {
 }
 
 async function updateCrewmate(id, { name, date_of_birth }) {
-    return (await db.query(
-        `UPDATE astronaut SET name = $1, date_of_birth = $2 WHERE id = $3 RETURNING *`,
-        [name, date_of_birth, id]
-    )).rows;
+    return (
+        await db.query(
+            `UPDATE astronaut SET name = $1, date_of_birth = $2 WHERE id = $3 RETURNING *`,
+            [name, date_of_birth, id]
+        )
+    ).rows;
 }
 
 async function deleteCrewmate(missionId, id) {
@@ -76,4 +134,11 @@ async function deleteCrewmate(missionId, id) {
         [missionId, id]
     );
 }
-module.exports = { getMissions, addCrewmate, updateCrewmate, deleteCrewmate };
+
+module.exports = {
+    getMissions,
+    addCrewmate,
+    updateCrewmate,
+    deleteCrewmate,
+    updateCopies,
+};

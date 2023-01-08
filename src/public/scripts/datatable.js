@@ -96,7 +96,7 @@ $(document).ready(function () {
     fetch("/api/missions")
         .then((response) => response.json())
         .then((data) => {
-            for (const mission of data) {
+            for (const mission of data.body) {
                 table.row
                     .add([
                         mission.mission_name,

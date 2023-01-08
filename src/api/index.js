@@ -1,4 +1,5 @@
 const express = require("express");
+const { requiresAuth } = require("express-openid-connect");
 const router = express.Router();
 
 const {
@@ -6,7 +7,34 @@ const {
     addCrewmate,
     updateCrewmate,
     deleteCrewmate,
+    updateCopies,
 } = require("../db/queries");
+
+function wrapCrewmate(crewmate) {
+    return {
+        "@context": {
+            "@vocab": "http://schema.org/",
+            id: "identifier",
+            astronaut_name: "name",
+            astronaut_dob: "birthDate",
+        },
+        "@type": "Person",
+        ...crewmate,
+    };
+}
+
+function wrapMission(mission) {
+    return {
+        "@context": {
+            "@vocab": "http://schema.org/",
+            id: "identifier",
+            mission_name: "name",
+        },
+        "@type": "Thing",
+        ...mission,
+        crew: mission.crew.map(wrapCrewmate)
+    };
+}
 
 express.response.sendWrapped = function (msg, res) {
     return this.json({
@@ -16,14 +44,14 @@ express.response.sendWrapped = function (msg, res) {
 };
 
 router.get("/missions", async (req, res) => {
-    res.sendWrapped("List missions", await getMissions());
+    res.sendWrapped("List missions", (await getMissions()).map(wrapMission));
 });
 
 router.get("/missions/:missionId", async (req, res) => {
     // TODO: return 404 if not found by id?
     res.sendWrapped(
         `Mission with id=${req.params.missionId}`,
-        (await getMissions()).filter((m) => m.id === +req.params.missionId)[0]
+        wrapMission((await getMissions()).filter((m) => m.id === +req.params.missionId)[0])
     );
 });
 
@@ -32,7 +60,8 @@ router.get("/missions/:missionId/crew", async (req, res) => {
         `Crew of mission with id=${req.params.missionId}`,
         (await getMissions())
             .filter((m) => m.id === +req.params.missionId)
-            .map((m) => m.crew)
+            .map((m) => m.crew)[0]
+            .map(wrapCrewmate)
     );
 });
 
@@ -88,7 +117,7 @@ router.get("/crewmates", async (req, res) => {
             i === self.findIndex((t) => t.astronaut_name === v.astronaut_name)
     );
 
-    res.sendWrapped("List crewmates", distinct);
+    res.sendWrapped("List crewmates", distinct.map(wrapCrewmate));
 });
 
 router.put("/crewmates/:id", async (req, res, next) => {
@@ -122,8 +151,23 @@ router.get("/wiki", async (req, res) => {
     );
 });
 
+router.post("/update-copies", async (req, res, next) => {
+    if (!res.locals.user) {
+        res.status(401);
+        next(Error("Only for logged in users!"));
+    }
+
+    try {
+        await updateCopies();
+        res.sendWrapped("Copies updated");
+    } catch (err) {
+        console.error({ err });
+        next(new Error("Error updating copies"));
+    }
+});
+
 router.all(["/missions/**", "/crewmates/**", "/wiki/**"], (req, res, next) => {
-    res.status(405).sendWrapped("Method not allowed")
-})
+    res.status(405).sendWrapped("Method not allowed");
+});
 
 module.exports = router;

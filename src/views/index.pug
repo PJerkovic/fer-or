@@ -50,4 +50,17 @@ html
             .csv
                 a(href="data/apollo-missions.json", download="apollo-missions.json") JSON
             .json
-                a(href="data/apollo-missions.csv", download="apollo-missions.csv") CSV 
+                a(href="data/apollo-missions.csv", download="apollo-missions.csv") CSV
+            
+            .login
+                if user
+                    input(type="button", onclick="location.href='/logout'", value="Logout")
+                else
+                    input(type="button", onclick="location.href='/login'", value="Login")
+            .user-data
+            if user
+                h2 Welcome, #{user.nickname}
+                input(type="button", onclick="location.href='/profile'", value="Profile")
+                input(type="button", onclick="refreshCopies(event)", value="Refresh Copies")
+    script
+        include ../public/scripts/index.js
